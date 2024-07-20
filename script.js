@@ -6,10 +6,11 @@ async function sendMessage() {
     chatlog.innerHTML += `<p><strong>You:</strong> ${userInput}</p>`;
 
     try {
-        const response = await fetch('/.netlify/functions/openai', {
+        const response = await fetch('https://api.openai.com/v1/engines/davinci-codex/completions', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${API_KEY}`
             },
             body: JSON.stringify({ message: userInput })
         });
