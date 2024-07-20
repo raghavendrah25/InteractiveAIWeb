@@ -10,13 +10,16 @@ async function sendMessage() {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': `Bearer ${API_KEY}`
+                'Authorization': `Bearer ${window.OPENAI_API_KEY}`
             },
-            body: JSON.stringify({ message: userInput })
+            body: JSON.stringify({
+                prompt: userInput,
+                max_tokens: 150
+            })
         });
 
         const data = await response.json();
-        const aiMessage = data.message;
+        const aiMessage = data.choices[0].text.trim();
         chatlog.innerHTML += `<p><strong>AI:</strong> ${aiMessage}</p>`;
     } catch (error) {
         console.error('Error:', error);
@@ -25,3 +28,12 @@ async function sendMessage() {
 
     document.getElementById('userInput').value = '';
 }
+
+// Load the API key from env.js
+fetch('env.js')
+    .then(response => response.text())
+    .then(text => {
+        const script = document.createElement('script');
+        script.innerHTML = text;
+        document.head.appendChild(script);
+    });

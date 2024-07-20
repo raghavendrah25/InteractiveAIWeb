@@ -21,10 +21,12 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Build and deploy
-        env:
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+      - name: Create env.js
         run: |
-          echo "window.OPENAI_API_KEY = '${{ secrets.OPENAI_API_KEY }}';" > public/env.js
-          npm run build
-          npm run deploy
+          echo "window.OPENAI_API_KEY = '${{ secrets.OPENAI_API_KEY }}';" > env.js
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./
